@@ -4,5 +4,5 @@
 *.pyc
 .settings
 .coverage
-/.ipynb_checkpoints
+/.ipynb_checkpoints/*
 *.ipynb

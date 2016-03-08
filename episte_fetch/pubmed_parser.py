@@ -2,11 +2,11 @@
 import HTMLParser
 import re
 
-import htmlentitydefs
+from httplib2 import Http
 
 from episte_libs import get_month_number_from_month_text, format_day_text
 from .base_parser import BaseParser
-
+from .general import get_tree, to_utf8, _get_one_element
 
 class Pubmed(BaseParser):
     def __init__(self):
@@ -221,28 +221,6 @@ class Pubmed(BaseParser):
 
         # content = Pubmed.unescape(content.decode('utf-8'))
         return self.parse(content)
-
-    @staticmethod
-    def unescape(text):
-        def fixup(m):
-            text = m.group(0)
-            if text[:2] == "&#":
-                # character reference
-                try:
-                    if text[:3] == "&#x":
-                        return unichr(int(text[3:-1], 16))
-                    else:
-                        return unichr(int(text[2:-1]))
-                except ValueError:
-                    pass
-            else:
-                # named entity
-                try:
-                    text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-                except KeyError:
-                    pass
-            return text  # leave as is
-        return re.sub(r"&#?\w+;", fixup, text)
 
     def parse_from_id_or_url(self, id_or_url):
         pmid = id_or_url

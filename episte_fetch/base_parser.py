@@ -2,7 +2,7 @@
 import re
 
 from httplib2 import Http
-from .general import get_tree, to_utf8, _get_one_element
+from .general import get_tree, to_utf8
 
 class BaseParser(object):
 
