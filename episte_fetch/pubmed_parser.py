@@ -9,6 +9,7 @@ from .base_parser import BaseParser
 from .general import get_tree, to_utf8, _get_one_element
 
 class Pubmed(BaseParser):
+
     def __init__(self):
         self.tree = None
         super(Pubmed, self).__init__()

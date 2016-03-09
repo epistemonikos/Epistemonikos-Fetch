@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+
 # import htmlentitydefs
-# import re
+import re
+import inspect
+import decorator
 
 from lxml import etree
 from lxml.etree import _ElementUnicodeResult
@@ -37,24 +40,22 @@ def to_utf8(text):
         return text.encode('utf-8')
     return text
 
+def date_format(_format):
+    def _do_format(func, *args, **kwargs):
+        argspec = inspect.getargspec(func)[0]
+        for _date in ['mindate', 'maxdate']:
+            if _date in argspec:
+                _pos = argspec.index(_date)
+                args = list(args)
+                args[_pos] = _format(args[_pos])
+                args = tuple(args)
+        return func(*args, **kwargs)
+    return decorator.decorator(_do_format)
 
-# def unescape(text):
-#     def fixup(m):
-#         text = m.group(0)
-#         if text[:2] == "&#":
-#             # character reference
-#             try:
-#                 if text[:3] == "&#x":
-#                     return unichr(int(text[3:-1], 16))
-#                 else:
-#                     return unichr(int(text[2:-1]))
-#             except ValueError:
-#                 pass
-#         else:
-#             # named entity
-#             try:
-#                 text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-#             except KeyError:
-#                 pass
-#         return text  # leave as is
-#     return re.sub(r"&#?\w+;", fixup, text)
+def date_to_year(date):
+    if isinstance(date, int):
+        return date
+    elif isinstance(date, str):
+        _year = re.findall(r'\d{4}', '10/10/2010')
+        _year = _year[0] if len(_year) == 1 else date
+        return _year
