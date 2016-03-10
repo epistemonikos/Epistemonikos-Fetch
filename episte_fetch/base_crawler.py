@@ -13,14 +13,14 @@ class BaseCrawler(object):
     def get_ids(self):
         return self.ids
 
-    def parse_ids(self, strategy=None):
+    def parse_ids(self):
+        raise NotImplementedError("Should have implemented this")
+
+    def parse_documents(self):
         raise NotImplementedError("Should have implemented this")
 
     def _parser(self):
         raise NotImplementedError("Should have implemented this")
-
-    # def save_callback(self, mongo_db, document_id, new_document=True, strategy='default', elasticsearch=None, autocommit=False):
-    #     raise NotImplementedError("Should have implemented this")
 
     def prepare(self, data):
         # If data can't be parsed by etree, save data in self.data
